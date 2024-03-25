@@ -196,7 +196,10 @@ class ModelRpcServer(rpyc.Service):
 
         if new_batch is not None:
             # Run new fill batch
+            t1 = time.time()
             self.forward_fill_batch(new_batch)
+            t2 = time.time()
+            logger.info(f"forward_fill_batch time: {(t2-t1)*1000:.2f}ms, token: {[x.prompt_tokens for x in new_batch.reqs]}")
 
             if not new_batch.is_empty():
                 if self.running_batch is None:
